@@ -7,7 +7,7 @@
 import numpy as np
 import numbers as nb
 from abc import ABC, abstractmethod
-from mealpy.utils import transfer
+from utils import transfer
 
 
 class LabelEncoder:

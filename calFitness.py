@@ -5,25 +5,26 @@ from Station import Station
 
 
 def get_sort_index(lst):
-    orders = [x[0] for x in lst]
-    sorted_lst = sorted(orders)
-    sort_index = [sorted_lst.index(x) for x in orders]
+
+    sorted_lst = sorted(lst)
+    sort_index = [sorted_lst.index(x) for x in lst]
     return sort_index
 
 def encoder(individual ,activities):
 
         sort_index = get_sort_index(individual)
+        clone_index = copy.deepcopy(sort_index)
         numbers = len(activities)
         cloneA = copy.deepcopy(activities)
-        unschedule = copy.deepcopy(individual)
+        unschedule = list(copy.deepcopy(individual))
         schedule = []
         while len(unschedule)>0:
-            order_id = sort_index.index(min(sort_index))
+            order_id = clone_index.index(min(sort_index))
             prece = cloneA[order_id].predecessor
             if len(prece)>0:
                 while len(prece)>0:
-                    indexs = [sort_index[i] for i in prece]
-                    order_id = sort_index.index(min(indexs))
+                    indexs = [clone_index[i] for i in prece]
+                    order_id = clone_index.index(min(indexs))
                     prece = cloneA[order_id].predecessor
             for key, Ei in cloneA.items():
                 prece = cloneA[key].predecessor
@@ -31,8 +32,9 @@ def encoder(individual ,activities):
                     prece.remove(order_id)
             schedule.append([order_id,cloneA[order_id].belong_plane_id,cloneA[order_id].taskid])
             del cloneA[order_id]
-            del unschedule[order_id]
-            return schedule
+            del unschedule[unschedule.index(individual[order_id])]
+            del sort_index[sort_index.index(clone_index[order_id])]
+        return schedule
 
 # TODO 编码是0-1的随机数，变成调度顺序编码
 

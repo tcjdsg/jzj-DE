@@ -74,9 +74,9 @@ class JADE():
         # np.random.uniform(1/20, 1/5) # the adaptation parameter control value of f and cr
         self.ap = ap
 
-        self.np1 = self.pop_size/2
-        self.np2 = self.pop_size / 2
-        self.PSP = 0.5
+        self.np1 = int(self.pop_size/2)
+        self.np2 = int(self.pop_size / 2)
+        self.PSP = int(0.5 * self.pop_size)
 
         self.sort_flag = False
         self.generator = np.random.default_rng(12345)
@@ -133,15 +133,15 @@ class JADE():
         ## Save history data
 
         self.history.list_epoch_time.append(runtime)
-        self.history.list_global_best_fit.append(self.history.list_global_best[-1].fitness)
-        self.history.list_current_best_fit.append(self.history.list_current_best[-1].fitness)
+        self.history.list_global_best_fit.append(self.history.list_global_best[-1])
+        self.history.list_current_best_fit.append(self.history.list_current_best[-1])
         # Save the exploration and exploitation data for later usage
         pos_matrix = np.array([agent.codes for agent in pop])
         div = np.mean(np.abs(np.median(pos_matrix, axis=0) - pos_matrix), axis=0)
         self.history.list_diversity.append(np.mean(div, axis=0))
         ## Print epoch
-        self.logger.info(f">>>Epoch: {epoch}, Current best: {self.history.list_current_best[-1].fitness}, "
-                         f"Global best: {self.history.list_global_best[-1].fitness}, Runtime: {runtime:.5f} seconds")
+        self.logger.info(f">>>Epoch: {epoch}, Current best: {self.history.list_current_best[-1]}, "
+                         f"Global best: {self.history.list_global_best[-1]}, Runtime: {runtime:.5f} seconds")
 
     def initialize_individuals_randomly(self):
         # uniform(lower_bound[j], upper_bound[j])
@@ -150,10 +150,9 @@ class JADE():
             # 拉丁超立方采样
             xx = self.lower_bound[j] + ( self.upper_bound[j] -  self.lower_bound[j]) * lhs(1,  self.pop_size)
             for i in range(self.pop_size):
-                self.population[i].codes[j] = xx[i]
+                self.population[i].codes[j] = xx[i][0]
         for i in range(self.pop_size):
-            self.individuals_fitness[i] = Fitness(self.population[i].codes, self.activities, 'l')
-            self.population[i].fitness = self.individuals_fitness[i]
+            self.population[i].fitness = Fitness(self.population[i].codes, self.activities, 'l')
     # TODO
     # def local_search(self):
 
@@ -232,7 +231,9 @@ class JADE():
         list_cr = list()
         temp_f = list()
         temp_cr = list()
-        pop_sorted = get_sorted_population(self.population)
+        pop_sorted = sorted(self.population,key=lambda x:x.fitness)
+        self.history.list_current_best.append(pop_sorted[0].fitness)
+        self.history.list_global_best.append(pop_sorted[0].fitness if pop_sorted[0].fitness<self.history.list_current_best[-1] else self.history.list_current_best[-1])
         pop = []
         if epoch == self.PSP:
             self.np1 = self.pop_size/2
@@ -274,10 +275,10 @@ class JADE():
         f_best_old_2 = sorted(self.population[self.np1:],key=lambda x:x.fitness)[0].fitness
 
         f_best_new_1 = sorted(pop[:self.np1],key=lambda x:x.fitness)[0].fitness
-        x_best_1 = sorted(pop[:self.np1],key=lambda x:x.fitness)[0]
+        x_best_1 = sorted(pop[:self.np1],key=lambda x:x.fitness)[0].codes
 
         f_best_new_2 = sorted(pop[self.np1:],key=lambda x:x.fitness)[0].fitness
-        x_best_2 = sorted(pop[self.np1:], key=lambda x: x.fitness)[0]
+        x_best_2 = sorted(pop[self.np1:], key=lambda x: x.fitness)[0].codes
 
         IQ1 = (f_best_old_1 - f_best_new_1)/f_best_old_1
         IQ2 = (f_best_old_2 - f_best_new_2)/f_best_old_2
@@ -299,7 +300,7 @@ class JADE():
         NDIV2 = DIV2 / (DIV1 + DIV2)
         NV1 = ((1-IQ1)+NDIV1)/((1-IQ1)+(1-IQ2)+NDIV1+NDIV2)
         NV2 = ((1-IQ2)+NDIV2)/((1-IQ1)+(1-IQ2)+NDIV2+NDIV1)
-        self.np1 = max(0.1,min(0.9,NV1))*self.pop_size
+        self.np1 = int(max(0.1,min(0.9,NV1))*self.pop_size)
         self.np2 = self.pop_size-self.np1
 
         # Randomly remove solution
@@ -324,15 +325,17 @@ class JADE():
 if __name__ == '__main__':
     from FixedMess import FixedMes
     NP = FixedMes.populationnumber
-    F = FixedMes.F
-    CR = FixedMes.CR
-    PLS = FixedMes.PLS
-    iter = FixedMes.ge
-    instance1 = np.load(f'biaozhun_12_11.npy', allow_pickle=True)[0]
+    # F = FixedMes.F
+    # CR = FixedMes.CR
+    # PLS = FixedMes.PLS
+    # iter = FixedMes.ge
+    instance1 = np.load(f'biaozhun_8_12.npy', allow_pickle=True)[0]
 
     Init = InitM("dis.csv")
     FixedMes.distance = Init.readDis()
 
     FixedMes.act_info = Init.readData(0, instance1)
+    FixedMes.total_Huamn_resource = [8,4,8,6]
     model = JADE(activities=FixedMes.act_info, epoch=1000, pop_size=50, miu_f = 0.5, miu_cr = 0.5, pt = 0.1, ap = 0.1)
+    model.RUN(FixedMes.total_Huamn_resource)
 

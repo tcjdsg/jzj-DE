@@ -6,7 +6,7 @@
 
 import numpy as np
 import operator
-from mealpy.utils.logger import Logger
+from utils.logger import Logger
 
 
 def is_in_bound(value, bound):

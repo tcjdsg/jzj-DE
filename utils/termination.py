@@ -4,8 +4,8 @@
 #       Github: https://github.com/thieu1995        %                         
 # --------------------------------------------------%
 
-from mealpy.utils.logger import Logger
-from mealpy.utils.validator import Validator
+from utils.logger import Logger
+from utils.validator import Validator
 
 
 class Termination:

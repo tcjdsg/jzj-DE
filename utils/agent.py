@@ -11,7 +11,7 @@ import numpy as np
 class Agent:
     ID = 0
 
-    def __init__(self, solution: np.ndarray = None, target: Target = None, **kwargs) -> None:
+    def __init__(self, solution: np.ndarray = None, target: float = None, **kwargs) -> None:
         self.solution = solution
         self.fitness = target
 
