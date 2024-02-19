@@ -26,9 +26,10 @@ class InitM(object):
             for j in range(1,dis.shape[1]):
                 pdis[i][j] = round(int(dis[i][j]) * 1  , 1 )#单位是m
                 #不考虑设备接口转移速度
-        return pdis[1:][1:]
+        return pdis[:][:]
 
     def readData(self,r,insatnce):
+        poss = []
         FixedMes.total_Huamn_resource =[int(n) for n in insatnce[2]]
         fea = insatnce[1]
         adj = insatnce[0]
@@ -54,6 +55,9 @@ class InitM(object):
                 index += 1
                 taskId = i
                 pos_id = int(fea[index][-2])
+                if pos_id not in poss:
+                    poss.append(pos_id)
+
                 duration = fea[index][0]
 
                 # nt()pri
@@ -93,6 +97,7 @@ class InitM(object):
                 task.predecessor = PreOrder
                 #task.vacp = vacp
                 activities[index] = task
+        print(poss)
 
         return  activities
         # 活动数int， 资源数int， 资源限量np.array， 所有活动集合dic{活动代号：活动对象}

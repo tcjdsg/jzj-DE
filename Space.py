@@ -14,7 +14,10 @@ class Space(object):
         #已完成工序
         self.TaskWait = [] #待完成工序
 
-
+    def delete(self, Activity):
+        self.alreadyworkTime -= Activity.duration
+        self.OrderOver.remove(Activity)
+        self.OrderOver.sort(key=lambda x: x.es)
     def update(self,Activity):
         # self.alreadyworkTime += Activity.duration
         self.state = 1

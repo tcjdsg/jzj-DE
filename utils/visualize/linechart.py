@@ -66,9 +66,13 @@ def __check_filepath__(filename):
     return filename
 
 
-def _draw_line_(data=None, title=None, legend=None, linestyle='-', color='b', x_label="#Iteration",
+def _draw_line_(data=None, title=None, legend=None, linestyle='-', color='b', x_label="Iteration",
                 y_label="Function Value", filename=None, exts=(".png", ".pdf"), verbose=True):
+    plt.rcParams['font.sans-serif'] = ['SimHei']
+
     x = np.arange(0, len(data))
+    for i in range(len(data)):
+        x[i] = int(x[i])
     y = data
     plt.title(title)
     plt.xlabel(x_label)
@@ -107,7 +111,7 @@ def _draw_multi_line_(data=None, title=None, list_legends=None, list_styles=None
 
 
 def _draw_multi_subplots_in_same_figure_(data=None, title=None, list_legends=None, list_styles=None, list_colors=None,
-                                     x_label="#Iteration", y_labels=None, filename=None, exts=(".png", ".pdf"), verbose=True):
+                                     x_label="Iteration", y_labels=None, filename=None, exts=(".png", ".pdf"), verbose=True):
     n_lines = len(data)
     len_lines = len(data[0])
     x = np.arange(0, len_lines)
@@ -148,8 +152,8 @@ def _draw_multi_subplots_in_same_figure_(data=None, title=None, list_legends=Non
     plt.close()
 
 
-def export_convergence_chart(data=None, title="Convergence Chart", legend=None, linestyle='-', color='b', x_label="#Iteration",
-                            y_label="Function Value", filename="convergence_chart", exts=(".png", ".pdf"), verbose=True):
+def export_convergence_chart(data=None, title="Convergence Chart", legend=None, linestyle='-', color='b',
+                             x_label="迭代次数", y_label="适应度值", filename=None, exts=(".png", ".pdf"), verbose=True):
     _draw_line_(data, title=title, legend=legend, linestyle=linestyle, color=color,
                 x_label=x_label, y_label=y_label, filename=filename, exts=exts, verbose=verbose)
 

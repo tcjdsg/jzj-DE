@@ -164,7 +164,7 @@ if __name__ == '__main__':
     CR = FixedMes.CR
     PLS = FixedMes.PLS
     iter = FixedMes.ge
-    instance1 = np.load(f'biaozhun_12_11.npy', allow_pickle=True)[0]
+    instance1 = np.load(f'biaozhun_8_11.npy', allow_pickle=True)[0]
 
     Init = InitM("dis.csv")
     FixedMes.distance = Init.readDis()

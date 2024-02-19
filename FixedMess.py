@@ -3,6 +3,9 @@ from collections import defaultdict
 
 
 class FixedMes(object):
+    SheBei = []
+    MAXT = 9999
+    start_time_codes=[]
     """
     distance:
     orderInputMes:
@@ -32,8 +35,8 @@ class FixedMes(object):
     numJzjPos = 18
     numHumanAll = [18,60]
 
-    planeOrderNum = 11
-    planeNum = 12
+    planeOrderNum = 12
+    planeNum = 18
     jzjNumbers=[1,2,3,5,6,7,8,9,10,11,12,13,14,15,16]  #舰载机编号
 
     RU_time = [1,2,3,4,5,6,7,8]
@@ -50,7 +53,7 @@ class FixedMes(object):
     constraintOrder = defaultdict(lambda: []) #记录每类人的可作用工序，和可作用舰载机范围
     # constraintOrder[0] = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
 
-    constraintOrder[0] = [ 1, 2, 5]
+    constraintOrder[0] = [1, 2, 5]
     constraintOrder[1] = [3,4, 16,17]
     constraintOrder[2] = [7, 8, 14,16]
     constraintOrder[3] = [6, 9, 10, 11,12,13,15]
@@ -68,7 +71,7 @@ class FixedMes(object):
 
     # 设备保障范围约束
     constraintS_JZJ = defaultdict(lambda: [])
-
+   #加油、供电、充氧、充氮
     constraintS_JZJ[0] = [[1, 2, 3],
                           [3, 4, 5],
                           [6, 7],

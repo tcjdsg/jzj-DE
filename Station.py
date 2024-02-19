@@ -16,7 +16,10 @@ class Station:
         self.TaskWait = [] #待完成工序
         self.fugai_time=0
 
-
+    def delete(self,Activity):
+        self.alreadyworkTime -= Activity.duration
+        self.OrderOver.remove(Activity)
+        self.OrderOver.sort(key=lambda x: x.es)
     def update(self,Activity):
         self.state=1
         self.alreadyworkTime += Activity.duration

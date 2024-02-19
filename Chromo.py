@@ -4,6 +4,7 @@ import numpy as np
 class Chromosome(object):
     def __init__(self,codes,f):
         self.codes = np.array(codes)
+
         self.fitness=f    #适应度
         self.rank = -1    #用于多目标
         self.crowding_distance = -1

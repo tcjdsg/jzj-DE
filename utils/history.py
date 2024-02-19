@@ -75,6 +75,7 @@ class History:
     def __init__(self, **kwargs):
         self.list_global_best = []  # List of global best solution found so far in all previous generations
         self.list_current_best = []  # List of current best solution in each previous generations
+        self.list_average = []
         self.list_epoch_time = []  # List of runtime for each generation
         self.list_global_best_fit = []  # List of global best fitness found so far in all previous generations
         self.list_current_best_fit = []  # List of current best fitness in each previous generations
